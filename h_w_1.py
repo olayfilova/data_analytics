@@ -1,39 +1,39 @@
-# #2a
-# type = type(2*3)
-# print(f"TYPE IS {type}, and result is {(2*3)}")
+#2a
+type = type(2*3)
+print(f"TYPE IS {type}, and result is {(2*3)}")
 
-# #b
-# val_1 = 3
-# val_2 = 3 
-# val_3 = 8
-# val_4 = 3
+#b
+val_1 = 3
+val_2 = 3 
+val_3 = 8
+val_4 = 3
 
-# res = (val_1 * val_2 + val_3)/val_4
-# print(res, type)
+res = (val_1 * val_2 + val_3)/val_4
+print(res, type)
 
-# #c
-# val_1 = 8
-# val_2 = 3
-# res = val_1//val_2
-# print(res, type)
+#c
+val_1 = 8
+val_2 = 33
+res = val_1//val_2
+print(res, type)
 
-# #d
-# res2 = (val_1) % (val_2)
-# print(res2, type)
+#d
+res2 = (val_1) % (val_2)
+print(res2, type)
 
-# #e
-# res = 5**2
-# print(res, type)
+#e
+res = 5**2
+print(res, type)
 
-# #f
-# val_1 = 'Hello'
-# val_2 = 'Word'
-# print((val_1 + val_2), type)
+#f
+val_1 = 'Hello'
+val_2 = 'Word'
+print((val_1 + val_2), type)
 
 
-# #3
-# str_1 = 'INPUT'
-# str_2 = "TOTAL"
+#3
+str_1 = 'INPUT'
+str_2 = "TOTAL"
 
 
 #4a
@@ -50,7 +50,7 @@ input_str = "1134567890123456789"
 
 def from_x_plus_y(input_str: str, start_from: int, length_numb: int):
     if len(input_str) < 12:
-        print("for proceeding min length in the input should be  12")
+        print("for proceeding, min length in the input should be  12")
 
     start_x = start_from - 1
     end_y = start_x + length_numb
