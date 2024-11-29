@@ -1,108 +1,166 @@
-import csv
+from typing import Optional
 import pandas as pd
-import sqlite3
+import logging
+from pathlib import Path
 import numpy as np
 
-try:
-    url = "https://lms.ithillel.ua/api/lms/files/66c39e4e7fb551d0ac564712"
-    df = pd.read_csv(url)
-    con = sqlite3.connect("archive.zip")
-    df.to_sql("archive.zip", con, if_exists='replace', index=False, method='multi')
-except:
-    print("raise HTTPError(req.full_url, code, msg, hdrs, fp\
-    urllib.error.HTTPError: HTTP Error 500: Internal Server Error\nкогда будем подключаться к базам? и кстати, не смогла сама округлить :) сама бы я недокрутила бы никогда в жизни")
+# 1
+def clean_dataset(
+        df: pd.DataFrame,
+        output_file: str = "my_output.csv",
+        yes_no_standardize: bool = True
+) -> Optional[pd.DataFrame]:
+    """
+    Clean the dataset by removing null values and standardizing Yes/No values.
+
+    Args:
+        df: Input DataFrame
+        output_file: Path to save the cleaned data
+        yes_no_standardize: Whether to standardize Yes/No values
+
+    Returns:
+        Cleaned DataFrame or None if error occurs
+    """
+    try:
+        # Validate input
+        if df.empty:
+            raise ValueError("Input DataFrame is empty")
+
+        original_count = len(df)
+
+        # Standardize Yes/No if requested
+        if yes_no_standardize:
+            df = df.replace({'Yes': 'YES', 'No': 'NO'}, regex=False)
+
+        # Remove null values
+        clean_df = df.dropna()
+
+        if clean_df.empty:
+            raise ValueError("All rows contained null values")
+
+        # Save to CSV
+        clean_df.to_csv(output_file, index=False)
+
+        # Log results
+        logging.info(f"Cleaned {original_count - len(clean_df)} rows")
+        logging.info(f"Saved cleaned data to {output_file}")
+
+        return clean_df
+
+    except Exception as e:
+        logging.error(f"Error during data cleaning: {e}")
+        return None
 
 
+# Example usage:
+if __name__ == "__main__":
+    try:
+        # Read your data
+        file_path = '/Users/olgafilova/Downloads/ChicagoCrimeData.csv'
+        df = pd.read_csv(file_path)
 
-file = '/Users/olgafilova/Downloads/student_performance_prediction.csv'
+        # Clean the data
+        cleaned_df = clean_dataset(df)
 
-
-class MissingValueError(Exception):
-    """Exception raised for rows with missing values."""
-    pass
-
-file = '/Users/olgafilova/Downloads/student_performance_prediction.csv'
-
-data = []
-try:
-    with open(file, 'r') as f:
-        reader = csv.reader(f)
-        for i in reader:
-            data.append(i)
-    # print(data)
-
-    df = pd.DataFrame(data[1:], columns=data[0])
-    # print(df)
-
-
-    for col in df.columns:
-        try:
-            df[col] = pd.to_numeric(df[col], errors='coerce')
-            if df[col].dtype in [np.float64, np.int64]:
-                df[col] = df[col].round(0)
-        except ValueError:
-            pass
-        ## for i in df:
-        ##    if isinstance(i, (float, int)):
-        ##       res = df.round(i)
-        ##print(res)
-        # print(df)
-
-
-    df = df.replace({'Yes':'YES', 'No': 'NO'})
-
-
-    clean_data = []
-    for index, row in df.iterrows():
-        if row.isnull().any():
-            print(f"Рядок {index + 1} містить пропуски. Пропущено.")
+        if cleaned_df is not None:
+            print("Data cleaning successful")
+            print(f"Original rows: {len(df)}")
+            print(f"Cleaned rows: {len(cleaned_df)}")
         else:
-            clean_data.append(row)
+            print("Data cleaning failed")
 
-
-    output_file = "my_output2.csv"
-    clean_df = pd.DataFrame(clean_data, columns=df.columns)
-    clean_df.to_csv(output_file, index=False)
-    print(f"Файл '{output_file}' успішно збережено.")
-
-except MissingValueError as e:
-    print(e)
+    except Exception as e:
+        print(f"Error: {e}")
 
 
 
-##################################################################################################я_сдалась_оч_сложно_а_а_а_а
-# data = []
-# try:
-#     with open(file, 'r') as f:
-#         reader = csv.reader(f)
-#         for i in reader:
-#             data.append(i)
-#     # print(data)
+# serious = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
+# serious = [i * 2 for i in serious]
+# print(serious)
+# print(serious[9])
+# print(serious[-1])
+#
+# shapes = ['square', 'circle', 'triangle', 'rectangle', 'trapezoid', 'rhombus', 'parallelogram', 'pentagon', 'hexagon', 'heptagon', 'octagon', 'nonagon', 'decagon']
+# print(shapes)
+# print(shapes[3])
+#
+# # 2
+# salaries= pd.Series([100,200,500],
+#         index=['John','Jane', "Bob"])
+# # salaries = {'John': 100, 'Jane': 200, 'Bob': 300}
+# salaries['car']=500
+#
+# salaries['Diva'] = np.nan
+#
+# df = pd.DataFrame(salaries, index=[0])
+# df.fillna(salaries.median(), inplace=True)
+# print(df)
+#
+# # df.to_csv('my_output2.csv', index=False)
 #
 #
+# # 3
+# salaries = {'John': 100, 'Jane': 200, 'Bob': 300}
+# salaries['car']=500
 #
-#     df = pd.DataFrame(data)
-#     df[df.select_dtypes(include=np.number).columns[:]] = df.select_dtypes(include=np.number).round(0)
-#     # print(df)
+# salaries['Diva'] = np.nan
 #
-#     for i in df:
-#         if isinstance(i, (float, int)):
-#             res = df.round(i)
-#     # print(res)
+# df = pd.DataFrame(salaries, index=[0])
+# df.fillna(0, inplace=True)
+# print(df)
+# # df.to_csv('my_output.csv', index=False)
 #
-#     res_replace = df.replace({'Yes':'YES', 'No': 'NO'})
-#     print(res_replace)
-#
-# except MissingValueError:
-#     for index, row in df.iterrows():
-#         if row.isnull().any():
-#             print("MissingValueError" f"Рядок {index + 1} містить пропуски. Пропущено.")
-#
-#
-# output_file = "my_output.csv"
-# df.to_csv(output_file, index=False)
-# print(f"Файл '{output_file}' успішно збережено.")
+# # 4 dict to df
+# salaries1 = {'John': 100, 'Jane': 200, 'Bob': 300}
+# df = pd.DataFrame(salaries1, index=[0])
+# print(df)
 
+# # 5
+# df1 = pd.DataFrame(np.random.randint(0, 100, size=(100, 5)), index=range(1, 101), columns=list('ABCDE'))
+# # print(df1)
+#
+# df1.at[1, 'A'] = 100
+# df1.at[1, 'B'] = 100
+# df1.at[2, 'c'] = 100
+# df1.at[2, 'd'] = 100
+# df1.at[3, 'c'] = 100
+# df1.at[3, 'd'] = 100
+# df1.at[2, 'C'] = 0
+# df1.at[2, 'D'] = 0
+# print(df1)
+# # print(pd.isnull(df1))
+# print(df1.dropna(how='all', axis=0))
+# print(df1.fillna(-76))
+#
+# df3 = pd.read_csv('/Users/olgafilova/Downloads/ChicagoCrimeData.csv')
+# print(df3.head())
+# print(df3.columns.tolist())
+#
+# print(df3.describe())
+# # print(df3[df3['BEAT'] == df3['BEAT'].describe().loc['mean']])
+# # # simplified
+# # print(df3['BEAT'].describe().loc['mean'])
+# # print(((df1['A']==100)&(df1['B']==100))|(df1['C']==100))
+# print(df1['c'].apply(np.max))
+# #
+# print(df1['A'].apply(lambda x: x*2))
+# print(df3)
+#
+# col_to_show=['LOCATION']
+# col_to_show2 = ['LATITUDE', 'BEAT']
+# print(df3.groupby(['BEAT'])[col_to_show].describe(percentiles=[0.5]))
+# print(df3.groupby(['LATITUDE'])[col_to_show2].agg([min, max, np.std, np.mean]))
+#
+# #
 
+# df1 = pd.DataFrame(np.random.randint(0, 100, size=(10, 5)), index=range(1, 11), columns=list('ABCDE'))
+# print(df1)
+# print(df1['A'].apply(lambda x: x*2))
 
+df = pd.DataFrame({'A':[100, 2, 100, 100, 5],'B':[1, 2, 3, 4, 5]})
+print(df)
+print(df['B'].rolling(window=2).mean())
+print(df['B'].expanding(min_periods=1).mean())
+df['previous']=df.groupby('A')['B'].shift(1)
+print(df)
 
