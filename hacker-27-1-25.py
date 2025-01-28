@@ -13,11 +13,10 @@ print(var_res)
 print(std_res)
 
 
-A = np.array(list(map(int, input().split())))
-B = np.array(list(map(int, input().split())))
+coefficients = list(map(int, input().split()))
 
-inner_product = np.inner(A, B)
-print(inner_product)
+x = int(input())
 
-outer_product = np.outer(A, B)
-print(outer_product)
+result = np.polyval(coefficients, x)
+
+print(result)
