@@ -13,10 +13,12 @@ print(var_res)
 print(std_res)
 
 
-matrix = np.array([list(map(float, input().split())) for _ in range(X)])
+x = int(input())
 
-determinant = np.linalg.det(matrix)
+array = np.array([list(map(float, input().split())) for i in range(x)])
 
-print(round(determinant, 2))
+determinate = np.linalg.det(array)
+
+print(round(determinate, 2))
 
 
