@@ -13,9 +13,11 @@ print(var_res)
 print(std_res)
 
 
-X = int(input())
+A = np.array(list(map(int, input().split())))
+B = np.array(list(map(int, input().split())))
 
-A = np.array([list(map(int, input().split())) for i in range(X)])
-B = np.array([list(map(int, input().split())) for i in range(X)])
+inner_product = np.inner(A, B)
+print(inner_product)
 
-print(np.dot(A, B))
+outer_product = np.outer(A, B)
+print(outer_product)
