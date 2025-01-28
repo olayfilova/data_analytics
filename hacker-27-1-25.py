@@ -13,8 +13,9 @@ print(var_res)
 print(std_res)
 
 
-A = np.array([1, 2, 3])  # First vector
-B = np.array([4, 5, 6])  # Second vector
+X = int(input())
 
-cross_product = np.cross(A, B)  # Calculate the cross product
-print(cross_product)
+A = np.array([list(map(int, input().split())) for i in range(X)])
+B = np.array([list(map(int, input().split())) for i in range(X)])
+
+print(np.dot(A, B))
