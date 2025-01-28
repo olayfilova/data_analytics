@@ -13,10 +13,10 @@ print(var_res)
 print(std_res)
 
 
-coefficients = list(map(int, input().split()))
+matrix = np.array([list(map(float, input().split())) for _ in range(X)])
 
-x = int(input())
+determinant = np.linalg.det(matrix)
 
-result = np.polyval(coefficients, x)
+print(round(determinant, 2))
 
-print(result)
+
