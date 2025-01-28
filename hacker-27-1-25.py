@@ -1,24 +1,26 @@
-import numpy as np
+def minion_game(s):
+    vowels = 'AEIOU'
+    kevin_score = 0
+    stuart_score = 0
+    length = len(s)
 
-X, Y = map(int, input().split())
+    for i in range(length):
+        if s[i] in vowels:
+            kevin_score += length - i
+        else:
+            stuart_score += length - i
 
-array = np.array([list(map(int, input().split())) for i in range(X)])
-
-mean_res = np.mean(array, axis=1)
-var_res = np.var(array, axis=0)
-std_res = round(np.std(array), 11)
-
-print(mean_res)
-print(var_res)
-print(std_res)
+    if kevin_score > stuart_score:
+        print("Kevin", kevin_score)
+    elif stuart_score > kevin_score:
+        print("Stuart", stuart_score)
+    else:
+        print("Draw")
 
 
-x = int(input())
+# Example Input
+string = input().strip().upper()
+minion_game(string)
 
-array = np.array([list(map(float, input().split())) for i in range(x)])
-
-determinate = np.linalg.det(array)
-
-print(round(determinate, 2))
 
 
