@@ -1,0 +1,5 @@
+select random(), random(), trunc(random() *100);
+select repeat('Night ', 3);
+select generate_series(1, 5);
+
+select 'https://www.google.com/day/' || trunc(random()*100) || repeat('yz', 2) || generate_series(1,5);
