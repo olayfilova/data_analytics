@@ -1,0 +1,4 @@
+select (case when random()>0.5
+        then 'https://google.com'
+        else 'https://www.google.com'
+        end) || generate_series(100, 120);
